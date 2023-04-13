@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const expressError = require('../expressError')
 const ExpressError = require('../expressError')
 const db = require('../db')
+const {BCRYPT_WORK_FACTOR} = require('../config')
 
 /** User of the site. */
 
@@ -14,7 +15,8 @@ class User {
 
   static async register({username, password, first_name, last_name, phone}) {
     try{
-      const hashedPassword = await bcrypt.hash(password, 12)
+      console.log(password, BCRYPT_WORK_FACTOR)
+      const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
       const result = await db.query(
         `
         INSERT INTO users (username, password, first_name, last_name, phone, join_at, last_login_at)
@@ -25,6 +27,7 @@ class User {
         return result.rows[0]
     }
     catch(err){
+      console.log(err)
       throw new ExpressError('Sign in failed', 401)
     }
    }
@@ -36,6 +39,7 @@ class User {
       const user = await db.query(
         `SELECT * FROM users WHERE username = $1`, [username]
         )
+        console.log(password, username, user)
       const correctPassword = await bcrypt.compare(password, user.rows[0].password)
         if (user && correctPassword){
           return true;

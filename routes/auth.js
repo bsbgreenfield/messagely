@@ -1,4 +1,4 @@
-const userModel = require('..models/user')
+const userModel = require('../models/user')
 const express = require('express')
 const router = new express.Router()
 const jwt = require('jsonwebtoken')
@@ -34,7 +34,7 @@ const { SECRET_KEY } = require('../config')
 router.post('/register', async (req, res, next) => {
     try{
         const {username, password, first_name, last_name, phone} = req.body
-        const newUser = await userModel.register(username, password, first_name, last_name, phone)
+        const newUser = await userModel.register({username, password, first_name, last_name, phone})
         const newUsername = newUser.username
         let token = jwt.sign({newUsername}, SECRET_KEY)
         await userModel.updateLoginTimestamp(username)
@@ -44,3 +44,5 @@ router.post('/register', async (req, res, next) => {
         next(err)
     }
 })
+
+module.exports = router

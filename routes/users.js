@@ -1,4 +1,4 @@
-const userModel = require('..models/user')
+const userModel = require('../models/user')
 const express = require('express')
 const router = new express.Router()
 const { ensureLoggedIn, ensureCorrectUser } = require('../middleware/auth')
@@ -74,3 +74,5 @@ router.get('/:username/from',ensureCorrectUser, async (req, res, next) => {
     next(err)
    }
 })
+
+module.exports = router

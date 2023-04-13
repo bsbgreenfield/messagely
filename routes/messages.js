@@ -1,4 +1,4 @@
-const messageModel = require('..models/message')
+const messageModel = require('../models/message')
 const express = require('express')
 const router = new express.Router()
 const { ensureLoggedIn, ensureCorrectUser } = require('../middleware/auth')
@@ -71,3 +71,4 @@ router.post('/:id/read', ensureLoggedIn, async (req,res, next) => {
     }
 })
 
+module.exports = router
